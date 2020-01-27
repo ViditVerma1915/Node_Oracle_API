@@ -50,9 +50,9 @@ app.get('/users', (request, response) => {
    if(userAuth){
     oracledb.getConnection(connAttrs, function (err, connection) {
        
-        connection.execute("SELECT * FROM thermax", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
+        connection.execute("SELECT * FROM thermax", {},
+       //   {  outFormat: oracledb.OBJECT // Return the result as Object },
+       function (err, result) {
             if (err) {
                 throw err
               }
@@ -100,6 +100,7 @@ app.post('/users', function (req, res) {
    if(userAuth){
     oracledb.getConnection(connAttrs, function (err, connection) { 
         const { id,name, city } = req.body;
+        //connection.execute("SELECT * FROM thermax", {}, {
         connection.execute("INSERT INTO thermax VALUES(:id,:name, :city) ", [id,name, city], {
             autoCommit: true,
             outFormat: oracledb.OBJECT // Return the result as Object
@@ -107,6 +108,7 @@ app.post('/users', function (req, res) {
             if (err) {
                 throw err
               }
+            //  res.status(200).json(result.rows)   
               res.send(JSON.stringify({
                  status:'Created User'
               }));
